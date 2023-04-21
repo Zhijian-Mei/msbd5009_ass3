@@ -16,8 +16,8 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
 
     size_t size_num_v1 sizeof(int);
     size_t size_num_v2 sizeof(int);
-    size_t size_h_lrval_index_u = sizeof(lrval_index_block)*h_lrval_index_u[0].size()*h_lrval_index_u.size();
-    size_t size_h_lrval_index_v = sizeof(lrval_index_block)*h_lrval_index_v[0].size()*h_lrval_index_v.size();
+    size_t size_h_lrval_index_u = sizeof(lrval_index_block*)*h_lrval_index_u[0].size()*h_lrval_index_u.size();
+    size_t size_h_lrval_index_v = sizeof(lrval_index_block*)*h_lrval_index_v[0].size()*h_lrval_index_v.size();
     
     int *d_num_v1;
     int *d_num_v2;
