@@ -5,7 +5,7 @@ using namespace std;
 __global__ void test_Kernel(int* C,int* num_v1,int* num_v2)
 {
     int threadID = threadIdx.x;
-    if threadID == 0{
+    if (threadID == 0){
         C[threadID] = *num_v1;
     } else{
     C[threadID] = *num_v2;
