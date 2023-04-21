@@ -14,16 +14,18 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     vector<vector<lrval_index_block*>> h_lrval_index_u; vector<vector<lrval_index_block*>> h_lrval_index_v;
     build_lrval_index(h_g, h_lrval_index_u, h_lrval_index_v);
 
-    int size_h_lrval_index_u = sizeof(lrval_index_block)*h_lrval_index_u[0].size()*h_lrval_index_u.size();
-    int size_h_lrval_index_v = sizeof(lrval_index_block)*h_lrval_index_v[0].size()*h_lrval_index_v.size();
+    size_t size_num_v1 sizeof(int);
+    size_t size_num_v2 siezof(int);
+    size_t size_h_lrval_index_u = sizeof(lrval_index_block)*h_lrval_index_u[0].size()*h_lrval_index_u.size();
+    size_t size_h_lrval_index_v = sizeof(lrval_index_block)*h_lrval_index_v[0].size()*h_lrval_index_v.size();
     
     int *d_num_v1;
     int *d_num_v2;
     vector<vector<lrval_index_block*>> *d_lrval_index_u;
     vector<vector<lrval_index_block*>> *d_lrval_index_v;
 
-    cudaMalloc((void**)&d_num_v1,sizeof(int));
-    cudaMalloc((void**)&d_num_v2,sizeof(int));
+    cudaMalloc((void**)&d_num_v1,size_num_v1);
+    cudaMalloc((void**)&d_num_v2,size_num_v2);
     cudaMalloc(&d_lrval_index_u,size_h_lrval_index_u);
     cudaMalloc(&d_lrval_index_v,size_h_lrval_index_v);
     cudaMemcpy(d_num_v1,h_g.num_v1,sizeof(int),cudaMemcpyHostToDevice);
