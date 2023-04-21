@@ -34,14 +34,14 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     cudaMemcpy(d_lrval_index_v,&h_lrval_index_v,size_h_lrval_index_v,cudaMemcpyHostToDevice);
     test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(*d_num_v1);
     exit(0);
-    vector<bool> left; vector<bool> right;
-    // all the vertices in query result are set as true
-    vector<vector<int>> queryStream;
-    queryStream.resize(Q_MAX);
-    int n_query = 0;
-    loadQuery(argv[2], queryStream, n_query);
-    queryStream.resize(n_query);
-    int queryAns[n_query*3];    
+    // vector<bool> left; vector<bool> right;
+    // // all the vertices in query result are set as true
+    // vector<vector<int>> queryStream;
+    // queryStream.resize(Q_MAX);
+    // int n_query = 0;
+    // loadQuery(argv[2], queryStream, n_query);
+    // queryStream.resize(n_query);
+    // int queryAns[n_query*3];    
 
 
 
