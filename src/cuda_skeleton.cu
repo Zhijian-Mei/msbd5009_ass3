@@ -34,7 +34,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     cudaMemcpy(d_num_v2,&h_g.num_v2,size_num_v2,cudaMemcpyHostToDevice);
     cudaMemcpy(d_lrval_index_u,&h_lrval_index_u,size_h_lrval_index_u,cudaMemcpyHostToDevice);
     cudaMemcpy(d_lrval_index_v,&h_lrval_index_v,size_h_lrval_index_v,cudaMemcpyHostToDevice);
-    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(*d_num_v1);
+    
     exit(0);
     // vector<bool> left; vector<bool> right;
     // // all the vertices in query result are set as true
