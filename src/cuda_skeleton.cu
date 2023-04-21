@@ -14,7 +14,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     vector<vector<lrval_index_block*>> h_lrval_index_u; vector<vector<lrval_index_block*>> h_lrval_index_v;
     build_lrval_index(h_g, h_lrval_index_u, h_lrval_index_v);
     for (int i = 0;i<h_lrval_index_u.size();i++){
-        for (int j = 0;j<h_lrval_index_u[i].size();i++){
+        for (int j = 0;j<h_lrval_index_u[i].size();j++){
             cout<<i<<" "<<j<<"\n";
             cout<<h_lrval_index_u[i][j]<<"\n";
         }
