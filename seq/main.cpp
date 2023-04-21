@@ -41,6 +41,7 @@ int main(int argc, char **argv) {
 		lrIndexBasic(g);
 		vector<vector<lrval_index_block*>> lrval_index_u; vector<vector<lrval_index_block*>> lrval_index_v;
 		build_lrval_index(g, lrval_index_u, lrval_index_v);
+		cout<<lrval_index_u.size()<<"\n";
 		for (int i = 0;i<lrval_index_u.size();i++){
         	for (int j = 0;j<lrval_index_u[i].size();j++){
             	cout<<i<<" "<<j<<"\n";
