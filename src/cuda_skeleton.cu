@@ -21,13 +21,13 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     for (int i = 0;i<h_lrval_index_v.size();i++){
         num_h_lrval_index_v = num_h_lrval_index_v + h_lrval_index_v[i].size();
     }
-    cout<<num_h_lrval_index_u<<" "<< num_h_lrval_index_v<<"\n";
-    exit(0);
+    
+    
     size_t size = 2 * sizeof(int);
     size_t size_num_v1 = sizeof(int);
     size_t size_num_v2 = sizeof(int);
-    size_t size_h_lrval_index_u = sizeof(lrval_index_block*)*h_lrval_index_u[0].size()*h_lrval_index_u.size();
-    size_t size_h_lrval_index_v = sizeof(lrval_index_block*)*h_lrval_index_v[0].size()*h_lrval_index_v.size();
+    size_t size_h_lrval_index_u = sizeof(h_lrval_index_u[0][0])*num_h_lrval_index_u;
+    size_t size_h_lrval_index_v = sizeof(h_lrval_index_v[0][0])*num_h_lrval_index_v;
     cout<<size_h_lrval_index_u<<" "<<size_num_v1<<"\n";
     exit(0);
     // int *h_c,*d_c;
