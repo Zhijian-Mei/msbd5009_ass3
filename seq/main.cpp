@@ -46,9 +46,9 @@ int main(int argc, char **argv) {
         	for (int j = 0;j<lrval_index_u[i].size();j++){
             	cout<<i<<" "<<j<<"\n";
             	cout<<lrval_index_u[i][j]<<"\n";
-        }
-		exit(0);
-    }
+        	}
+		}
+    
 		vector<bool> left; vector<bool> right;
 		// all the vertices in query result are set as true
 		vector<vector<int>> queryStream;
