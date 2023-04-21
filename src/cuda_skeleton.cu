@@ -28,7 +28,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     size_t size_num_v2 = sizeof(int);
     size_t size_h_lrval_index_u = sizeof(h_lrval_index_u[0][0])*num_h_lrval_index_u;
     size_t size_h_lrval_index_v = sizeof(h_lrval_index_v[0][0])*num_h_lrval_index_v;
-    cout<<size_h_lrval_index_u<<" "<<size_num_v1<<"\n";
+    cout<<size_h_lrval_index_u<<" "<<size_h_lrval_index_v<<"\n";
     exit(0);
     // int *h_c,*d_c;
     // h_c = (int*)malloc(size);
