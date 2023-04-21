@@ -29,16 +29,6 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     size_t size_h_lrval_index_u = sizeof(h_lrval_index_u[0][0])*num_h_lrval_index_u;
     size_t size_h_lrval_index_v = sizeof(h_lrval_index_v[0][0])*num_h_lrval_index_v;
     cout<<size_h_lrval_index_u<<" "<<size_h_lrval_index_v<<"\n";
-    exit(0);
-    // int *h_c,*d_c;
-    // h_c = (int*)malloc(size);
-    // cudaMalloc((void**)&d_c,size);
-    // cudaMemcpy(d_c,h_c,size,cudaMemcpyHostToDevice);
-    // test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_c);
-    // cudaMemcpy(h_c,d_c,size,cudaMemcpyDeviceToHost);
-    // cout<<h_c[0]<<" "<<h_c[1]<<"\n";
-    // exit(0);
-
 
 
     int *d_num_v1;
@@ -57,12 +47,12 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     // cudaMemcpy(h_c,d_c,size,cudaMemcpyDeviceToHost);
     // exit(0);
 
-    vector<vector<lrval_index_block*>> *d_lrval_index_u;
-    vector<vector<lrval_index_block*>> *d_lrval_index_v;
-    cudaMalloc(&d_lrval_index_u,size_h_lrval_index_u);
-    cudaMalloc(&d_lrval_index_v,size_h_lrval_index_v);
-    cudaMemcpy(d_lrval_index_u,&h_lrval_index_u,size_h_lrval_index_u,cudaMemcpyHostToDevice);
-    cudaMemcpy(d_lrval_index_v,&h_lrval_index_v,size_h_lrval_index_v,cudaMemcpyHostToDevice);
+    vector<vector<lrval_index_block*>> d_lrval_index_u;
+    vector<vector<lrval_index_block*>> d_lrval_index_v;
+    cudaMalloc(d_lrval_index_u,size_h_lrval_index_u);
+    cudaMalloc(d_lrval_index_v,size_h_lrval_index_v);
+    cudaMemcpy(d_lrval_index_u,h_lrval_index_u,size_h_lrval_index_u,cudaMemcpyHostToDevice);
+    cudaMemcpy(d_lrval_index_v,h_lrval_index_v,size_h_lrval_index_v,cudaMemcpyHostToDevice);
     
     exit(0);
     // vector<bool> left; vector<bool> right;
