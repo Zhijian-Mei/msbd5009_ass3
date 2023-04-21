@@ -2,7 +2,7 @@
 
 using namespace std;
 
-__global__ void test_Kernel(int d_num_v1)
+__global__ void test_Kernel(int* d_num_v1)
 {
     int threadID = threadIdx.x;
     printf("threadID %-3d d_num_v1%3d\n",threadID,d_num_v1);
@@ -24,9 +24,9 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     vector<vector<lrval_index_block*>> *d_lrval_index_u;
     vector<vector<lrval_index_block*>> *d_lrval_index_v;
     
-    cudaMalloc(&d_num_v1,size_num_v1);
-    cudaMalloc(&d_num_v2,size_num_v2);
-    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(*d_num_v1);
+    cudaMalloc((void**)&d_num_v1,size_num_v1);
+    cudaMalloc((void**)&d_num_v2,size_num_v2);
+    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_num_v1);
     exit(0);
     cudaMalloc(&d_lrval_index_u,size_h_lrval_index_u);
     cudaMalloc(&d_lrval_index_v,size_h_lrval_index_v);
