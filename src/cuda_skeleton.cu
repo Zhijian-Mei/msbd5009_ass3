@@ -28,7 +28,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     cudaMemcpy(d_c,h_c,size,cudaMemcpyHostToDevice);
     test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_c);
     cudaMemcpy(h_c,d_c,size,cudaMemcpyDeviceToHost);
-    cout<<h_c[0]<<h_c[1]<<"\n";
+    cout<<h_c[0]<<" "<<h_c[1]<<"\n";
     exit(0);
 
 
