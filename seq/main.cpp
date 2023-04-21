@@ -41,6 +41,12 @@ int main(int argc, char **argv) {
 		lrIndexBasic(g);
 		vector<vector<lrval_index_block*>> lrval_index_u; vector<vector<lrval_index_block*>> lrval_index_v;
 		build_lrval_index(g, lrval_index_u, lrval_index_v);
+		for (int i = 0;i<lrval_index_u.size();i++){
+        	for (int j = 0;j<lrval_index_u[i].size();i++){
+            	cout<<i<<" "<<j<<"\n";
+            	cout<<lrval_index_u[i][j]<<"\n";
+        }
+    }
 		vector<bool> left; vector<bool> right;
 		// all the vertices in query result are set as true
 		vector<vector<int>> queryStream;
