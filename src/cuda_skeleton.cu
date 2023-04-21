@@ -2,10 +2,10 @@
 
 using namespace std;
 
-__global__ void test_Kernel(int* d_num_v1)
+__global__ void test_Kernel(int* C)
 {
     int threadID = threadIdx.x;
-    printf("threadID %-3d d_num_v1%3d\n",threadID,d_num_v1);
+    C[threadID] = threadID;
 }
 
 void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, int* queryAns) {
@@ -14,11 +14,25 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     vector<vector<lrval_index_block*>> h_lrval_index_u; vector<vector<lrval_index_block*>> h_lrval_index_v;
     build_lrval_index(h_g, h_lrval_index_u, h_lrval_index_v);
 
+    
+
+    size_t size = 2 * sizeof(int);
     size_t size_num_v1 = sizeof(int);
     size_t size_num_v2 = sizeof(int);
     size_t size_h_lrval_index_u = sizeof(lrval_index_block*)*h_lrval_index_u[0].size()*h_lrval_index_u.size();
     size_t size_h_lrval_index_v = sizeof(lrval_index_block*)*h_lrval_index_v[0].size()*h_lrval_index_v.size();
     
+    int *h_c,*d_c;
+    h_c = (int*)malloc(size);
+    cudaMalloc((void**)&d_c,size);
+    cudaMemcpy(d_c,h_c,size,cudaMemcpyHostToDevice);
+    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_c);
+    cudaMemcpy(h_c,d_c,size,cudaMemcpyDeviceToHost);
+    cout<<h_c[0]<<h_c[1]<<"\n";
+    exit(0);
+
+
+
     int *d_num_v1;
     int *d_num_v2;
     vector<vector<lrval_index_block*>> *d_lrval_index_u;
@@ -26,9 +40,8 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     
     cudaMalloc((void**)&d_num_v1,size_num_v1);
     cudaMalloc((void**)&d_num_v2,size_num_v2);
-    cudaMemcpy(d_num_v1,h_g.num_v1,size_num_v1,cudaMemcpyHostToDevice);
-    cudaMemcpy(d_num_v2,h_g.num_v2,size_num_v2,cudaMemcpyHostToDevice);
-    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_num_v1);
+    cudaMemcpy(d_num_v1,&h_g.num_v1,size_num_v1,cudaMemcpyHostToDevice);
+    cudaMemcpy(d_num_v2,&h_g.num_v2,size_num_v2,cudaMemcpyHostToDevice);
     exit(0);
     cudaMalloc(&d_lrval_index_u,size_h_lrval_index_u);
     cudaMalloc(&d_lrval_index_v,size_h_lrval_index_v);
