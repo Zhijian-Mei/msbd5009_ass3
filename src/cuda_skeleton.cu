@@ -23,7 +23,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     int *d_num_v2;
     vector<vector<lrval_index_block*>> *d_lrval_index_u;
     vector<vector<lrval_index_block*>> *d_lrval_index_v;
-
+    exit(0);
     cudaMalloc(&d_num_v1,size_num_v1);
     cudaMalloc(&d_num_v2,size_num_v2);
     cudaMalloc(&d_lrval_index_u,size_h_lrval_index_u);
