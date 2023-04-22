@@ -2,7 +2,7 @@
 
 using namespace std;
 const int Q_MAX = 10000000;
-__global__ void test_Kernel(int* d_lrval_index_u_size,int* d_queryStream,int* d_queryAns,int d_n_query)
+__global__ void test_Kernel(int* d_lrval_index_u_size,int* d_queryStream,int* d_queryAns,int d_n_query,int* d_lrval_index_u_length)
 {
     const int tid = blockDim.x*blockIdx.x + threadIdx.x;
     const int nthread = blockDim.x*gridDim.x; 
@@ -11,7 +11,7 @@ __global__ void test_Kernel(int* d_lrval_index_u_size,int* d_queryStream,int* d_
         int flag = 0;
         int lval = d_queryStream[i*2];
         int rval = d_queryStream[i*2+1];
-        if ((sizeof(d_lrval_index_u_size) / sizeof(d_lrval_index_u_size[0]) <= lval) || (sizeof(d_lrval_index_u_size[lval])/sizeof(d_lrval_index_u_size[lval][0])) <= rval){
+        if (d_lrval_index_u_length<= lval) || (d_lrval_index_u_size[i] <= rval){
 		    flag = 0;
         } else {
             flag = 1;
@@ -77,9 +77,13 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     // cout<<h_c[0]<<" "<<h_c[1]<<"\n";
     // exit(0);
     int *h_lrval_index_u_size,*d_lrval_index_u_size;
+    int *h_lrval_index_u_length,*d_lrval_index_u_length;
+    h_lrval_index_u_length = (int*)malloc(sizeof(int));
+    cudaMemcpy(d_lrval_index_u_length,h_lrval_index_u_length,sizeof(int),cudaMemcpyHostToDevice);
+
     size_t size_h_lrval_index_u_size = sizeof(h_lrval_index_u.size()) * h_lrval_index_u.size();
     h_lrval_index_u_size = (int*)malloc(size_h_lrval_index_u_size);
- 
+    
     for (int i = 0;i<h_lrval_index_u.size();i++){
         h_lrval_index_u_size[i] = h_lrval_index_u[i].size();
     }
@@ -118,7 +122,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
 
     cudaMalloc((void**)&d_queryAns,size_h_queryAns);
     cudaMemcpy(d_queryAns,queryAns,size_h_queryAns,cudaMemcpyHostToDevice);
-    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size,d_queryStream,d_queryAns,*d_n_query);
+    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size,d_queryStream,d_queryAns,*d_n_query,d_lrval_index_u_length);
 
     cudaMemcpy(queryAns,d_queryAns,size_h_queryAns,cudaMemcpyDeviceToHost);
 
