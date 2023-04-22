@@ -5,7 +5,7 @@ using namespace std;
 __global__ void test_Kernel(int* d_lrval_index_u_size,int* d_c)
 {
     int threadID = threadIdx.x;
-    d_c[threadID] = d_lrval_index_u_size[threadID];
+    d_c[threadID] = 1;
 }
 
 void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, int* queryAns) {
@@ -44,7 +44,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     }
     cudaMalloc((void**)&d_lrval_index_u_size,size_h_lrval_index_u_size);
     cudaMemcpy(d_lrval_index_u_size,h_lrval_index_u_size,size_h_lrval_index_u_size,cudaMemcpyHostToDevice);
-    exit(0);
+    
     test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size,d_c);
     cudaMemcpy(h_c,d_c,size,cudaMemcpyDeviceToHost);
     cout<<d_c[0]<<" "<<d_c[1]<<"\n";
