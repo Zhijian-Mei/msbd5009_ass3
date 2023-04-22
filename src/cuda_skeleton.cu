@@ -5,7 +5,9 @@ using namespace std;
 __global__ void test_Kernel(int* d_lrval_index_u_size)
 {
     int threadID = threadIdx.x;
-    printf(d_lrval_index_u_size[threadID]);
+    int a = d_lrval_index_u_size[threadID];
+    char c = a+'0';
+    printf(c);
 }
 
 void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, int* queryAns) {
@@ -40,7 +42,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     // exit(0);
     int *h_lrval_index_u_size,*d_lrval_index_u_size;
     size_t size_h_lrval_index_u_size = sizeof(int) * h_lrval_index_u.size();
-    h_lrval_index_u_size = (int*)malloc(size_h_lrval_index_u_size)
+    h_lrval_index_u_size = (int*)malloc(size_h_lrval_index_u_size);
     for (int i = 0;i<h_lrval_index_u.size();i++){
         h_lrval_index_u_size[i] = h_lrval_index_u[i].size();
     }
