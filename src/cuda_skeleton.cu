@@ -5,7 +5,7 @@ using namespace std;
 __global__ void test_Kernel(int* d_lrval_index_u_size,int* d_c)
 {
     int threadID = threadIdx.x;
-    d_c[threadID] = 1;
+    // d_c[threadID] = 1;
 }
 
 void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, int* queryAns) {
