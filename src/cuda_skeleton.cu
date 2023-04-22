@@ -96,7 +96,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     cudaMemcpy(d_queryStream,h_queryStream,size_h_query,cudaMemcpyHostToDevice);
     test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size,d_queryStream);
     cudaMemcpy(h_queryStream,d_queryStream,size_h_query,cudaMemcpyDeviceToHost);
-    cout<<h_queryStream[0]<<" "<<h_queryStream[1]<<"\n";
+    cout<<h_queryStream[18]<<" "<<h_queryStream[19]<<"\n";
     exit(0);
 
 
