@@ -28,7 +28,7 @@ __global__ void test(int* d_lrval_index_u_size,int* d_queryStream,int* d_n_query
     const int tid = blockDim.x*blockIdx.x + threadIdx.x;
     const int nthread = blockDim.x*gridDim.x; 
 
-    for(int i = tid;i<d_n_query; i+= nthread){
+    for(int i = tid;i<*d_n_query; i+= nthread){
         int flag = 0;
         d_c[i] = d_queryStream[2];
         d_c[i+1] = d_queryStream[2+1];
