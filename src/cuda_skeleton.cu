@@ -2,12 +2,10 @@
 
 using namespace std;
 
-__global__ void test_Kernel(int* d_lrval_index_u_size)
+__global__ void test_Kernel(int* d_lrval_index_u_size,int* d_c)
 {
     int threadID = threadIdx.x;
-    int a = d_lrval_index_u_size[threadID];
-    char c = a+'0';
-    printf(c);
+    d_c[threadID] = d_lrval_index_u_size[threadID];
 }
 
 void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, int* queryAns) {
@@ -18,7 +16,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     int num_h_lrval_index_u = 0;
     int num_h_lrval_index_v = 0;
 
-    // size_t size = 2 * sizeof(int);
+    size_t size = 2 * sizeof(int);
     size_t size_num_v1 = sizeof(int);
     size_t size_num_v2 = sizeof(int);
 
@@ -33,10 +31,10 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     cudaMemcpy(d_num_v1,&h_g.num_v1,size_num_v1,cudaMemcpyHostToDevice);
     cudaMemcpy(d_num_v2,&h_g.num_v2,size_num_v2,cudaMemcpyHostToDevice);
 
-    // int *h_c,*d_c;
-    // h_c = (int*)malloc(size);
-    // cudaMalloc((void**)&d_c,size);
-    // cudaMemcpy(d_c,h_c,size,cudaMemcpyHostToDevice);
+    int *h_c,*d_c;
+    h_c = (int*)malloc(size);
+    cudaMalloc((void**)&d_c,size);
+    cudaMemcpy(d_c,h_c,size,cudaMemcpyHostToDevice);
     // test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_c,d_num_v1,d_num_v2);
     // cudaMemcpy(h_c,d_c,size,cudaMemcpyDeviceToHost);
     // exit(0);
@@ -48,8 +46,9 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     }
     cudaMalloc((void**)&d_lrval_index_u_size,size_h_lrval_index_u_size);
     cudaMemcpy(d_lrval_index_u_size,h_lrval_index_u_size,size_h_lrval_index_u_size,cudaMemcpyHostToDevice);
-    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size);
-    
+    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size,d_c);
+    cudaMemcpy(h_c,d_c,size,cudaMemcpyDeviceToHost);
+    cout<<d_c[0]<<" "<<d_c[1]<<"\n";
     exit(0);
     // vector<bool> left; vector<bool> right;
     // // all the vertices in query result are set as true
