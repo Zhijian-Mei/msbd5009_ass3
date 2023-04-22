@@ -86,7 +86,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     exit(0);
     int *h_queryStream,*d_queryStream;
     size_t size_h_query = sizeof(queryStream[0][0]) * n_query * 2
-    h_queryStream = (int*)malloc(size_h_query)
+    h_queryStream = (int*)malloc(size_h_query);
     for (int i = 0;i<n_query;i++){
         h_queryStream[i*2] = queryStream[i][0];
         h_queryStream[i*2+1] = queryStream[i][1];
