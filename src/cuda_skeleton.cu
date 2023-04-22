@@ -11,7 +11,7 @@ __global__ void test_Kernel(int* d_lrval_index_u_size,int* d_queryStream,int* d_
         int flag = 0;
         int lval = d_queryStream[i*2];
         int rval = d_queryStream[i*2+1];
-        if (*d_lrval_index_u_length<= lval) || (d_lrval_index_u_size[i] <= rval){
+        if ((*d_lrval_index_u_length<= lval) || (d_lrval_index_u_size[i] <= rval)){
 		    flag = 0;
         } else {
             flag = 1;
