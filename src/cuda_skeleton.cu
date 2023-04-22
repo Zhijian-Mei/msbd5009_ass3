@@ -11,27 +11,27 @@ __global__ void Kernel(int* d_lrval_index_u_size,int* d_queryStream,int* d_query
         int flag = 0;
         int lval = d_queryStream[i*2];
         int rval = d_queryStream[i*2+1];
-        // if ((*d_lrval_index_u_length<= lval) || (d_lrval_index_u_size[i] <= rval)){
-		//     flag = 0;
-        // } else {
-        //     flag = 1;
-        // }
+        if ((*d_lrval_index_u_length<= lval) || (d_lrval_index_u_size[i] <= rval)){
+		    flag = 0;
+        } else {
+            flag = 1;
+        }
 
-        // d_queryAns[i*3] = lval;
-        // d_queryAns[i*3+1] = rval;
-        // d_queryAns[i*3+2] = flag;
+        d_queryAns[i*3] = lval;
+        d_queryAns[i*3+1] = rval;
+        d_queryAns[i*3+2] = flag;
     }
     
 }
-__global__ void test(int* d_lrval_index_u_size,int* d_queryStream,int* d_n_query,int* d_c)
+__global__ void test(int* d_lrval_index_u_size,int* d_queryStream,int* d_n_query,int* d_c,int* d_lrval_index_u_length)
 {
     const int tid = blockDim.x*blockIdx.x + threadIdx.x;
     const int nthread = blockDim.x*gridDim.x; 
 
     for(int i = tid;i<*d_n_query; i+= nthread){
         int flag = 0;
-        d_c[i*2] = d_queryStream[i*2];
-        d_c[i*2+1] = d_queryStream[i*2+1];
+        int lval = d_queryStream[i*2];
+        int rval = d_queryStream[i*2+1];
         if ((*d_lrval_index_u_length<= lval) || (d_lrval_index_u_size[i] <= rval)){
 		    flag = 0;
         } else {
