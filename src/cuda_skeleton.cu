@@ -23,7 +23,7 @@ __global__ void Kernel(int* d_lrval_index_u_size,int* d_queryStream,int* d_query
     }
     
 }
-__global__ void test(int* d_lrval_index_u_size,int* d_queryStream,int d_n_query,int* d_c)
+__global__ void test(int* d_lrval_index_u_size,int* d_queryStream,int* d_n_query,int* d_c)
 {
     const int tid = blockDim.x*blockIdx.x + threadIdx.x;
     const int nthread = blockDim.x*gridDim.x; 
