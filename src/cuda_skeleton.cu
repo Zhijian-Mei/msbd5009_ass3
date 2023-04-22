@@ -50,15 +50,15 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
 
     vector<vector<int>> queryStream;
     queryStream.resize(Q_MAX);
-    int n_query = sizeof(queryAns)/sizeof(queryAns[0]);
+    int n_query = 0;
     int *d_n_query;
 
     loadQuery(dir, queryStream);
+    get_n_query(dir, n_query);
     queryStream.resize(n_query);
     cudaMalloc((void**)&d_n_query,sizeof(int));
     cudaMemcpy(d_n_query,&n_query,sizeof(int),cudaMemcpyHostToDevice);
     cudaMemcpy(&n_query,d_n_query,sizeof(int),cudaMemcpyDeviceToHost);
-    
     
     int *h_queryStream,*d_queryStream;
     size_t size_h_query = sizeof(queryStream[0][0]) * n_query * 2;
