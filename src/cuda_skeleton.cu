@@ -30,8 +30,8 @@ __global__ void test(int* d_lrval_index_u_size,int* d_queryStream,int d_n_query,
 
     for(int i = tid;i<d_n_query; i+= nthread){
         int flag = 0;
-        d_c[i*2] = d_queryStream[i*2];
-        d_c[i*2+1] = d_queryStream[i*2+1];
+        d_c[i*2] = d_queryStream[2];
+        d_c[i*2+1] = d_queryStream[2+1];
         // if ((*d_lrval_index_u_length<= lval) || (d_lrval_index_u_size[i] <= rval)){
 		//     flag = 0;
         // } else {
