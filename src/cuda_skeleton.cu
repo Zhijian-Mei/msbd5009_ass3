@@ -2,10 +2,10 @@
 
 using namespace std;
 
-__global__ void test_Kernel(int* C,int* num_v1,int* num_v2)
+__global__ void test_Kernel(int* d_lrval_index_u_size)
 {
     int threadID = threadIdx.x;
-    
+    printf(d_lrval_index_u_size[threadID]);
 }
 
 void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, int* queryAns) {
@@ -15,21 +15,11 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     build_lrval_index(h_g, h_lrval_index_u, h_lrval_index_v);
     int num_h_lrval_index_u = 0;
     int num_h_lrval_index_v = 0;
-    for (int i = 0;i<h_lrval_index_u.size();i++){
-        num_h_lrval_index_u = num_h_lrval_index_u + h_lrval_index_u[i].size();
-    }
-    for (int i = 0;i<h_lrval_index_v.size();i++){
-        num_h_lrval_index_v = num_h_lrval_index_v + h_lrval_index_v[i].size();
-    }
-    
-    
-    size_t size = 2 * sizeof(int);
+
+    // size_t size = 2 * sizeof(int);
     size_t size_num_v1 = sizeof(int);
     size_t size_num_v2 = sizeof(int);
-    size_t size_h_lrval_index_u = sizeof(h_lrval_index_u[0][0])*num_h_lrval_index_u;
-    size_t size_h_lrval_index_v = sizeof(h_lrval_index_v[0][0])*num_h_lrval_index_v;
-    cout<<size_h_lrval_index_u<<" "<<size_h_lrval_index_v<<"\n";
-    cout<<sizeof(h_lrval_index_u[0][0])<<"\n";
+
 
 
 
@@ -48,12 +38,15 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     // test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_c,d_num_v1,d_num_v2);
     // cudaMemcpy(h_c,d_c,size,cudaMemcpyDeviceToHost);
     // exit(0);
-    lrval_index_block* d_lrval_index_u;
-    lrval_index_block* d_lrval_index_v;
-    cudaMalloc((void**)&d_lrval_index_u,size_h_lrval_index_u);
-    cudaMalloc((void**)&d_lrval_index_v,size_h_lrval_index_v);
-    cudaMemcpy(d_lrval_index_u,&h_lrval_index_u,size_h_lrval_index_u,cudaMemcpyHostToDevice);
-    cudaMemcpy(d_lrval_index_v,&h_lrval_index_v,size_h_lrval_index_v,cudaMemcpyHostToDevice);
+    int h_lrval_index_u_size[h_lrval_index_u.size()];
+    int *d_lrval_index_u_size;
+    size_t size_h_lrval_index_u_size = sizeof(int) * h_lrval_index_u.size();
+    for (int i = 0;i<h_lrval_index_u.size();i++){
+        h_lrval_index_u_size[i] = h_lrval_index_u[i].size();
+    }
+    cudaMalloc((void**)&d_lrval_index_u_size,size_h_lrval_index_u_size);
+    cudaMemcpy(d_lrval_index_u_size,&h_lrval_index_u_size,size_d_lrval_index_u_size,cudaMemcpyHostToDevice);
+    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size);
     
     exit(0);
     // vector<bool> left; vector<bool> right;
