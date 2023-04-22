@@ -38,20 +38,20 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     vector<vector<lrval_index_block*>> h_lrval_index_u; vector<vector<lrval_index_block*>> h_lrval_index_v;
     build_lrval_index(h_g, h_lrval_index_u, h_lrval_index_v);
 
-    size_t size = 2 * sizeof(int);
-    size_t size_num_v1 = sizeof(int);
-    size_t size_num_v2 = sizeof(int);
+    // size_t size = 2 * sizeof(int);
+    // size_t size_num_v1 = sizeof(int);
+    // size_t size_num_v2 = sizeof(int);
 
 
 
 
-    int *d_num_v1;
-    int *d_num_v2;
+    // int *d_num_v1;
+    // int *d_num_v2;
     
-    cudaMalloc((void**)&d_num_v1,size_num_v1);
-    cudaMalloc((void**)&d_num_v2,size_num_v2);
-    cudaMemcpy(d_num_v1,&h_g.num_v1,size_num_v1,cudaMemcpyHostToDevice);
-    cudaMemcpy(d_num_v2,&h_g.num_v2,size_num_v2,cudaMemcpyHostToDevice);
+    // cudaMalloc((void**)&d_num_v1,size_num_v1);
+    // cudaMalloc((void**)&d_num_v2,size_num_v2);
+    // cudaMemcpy(d_num_v1,&h_g.num_v1,size_num_v1,cudaMemcpyHostToDevice);
+    // cudaMemcpy(d_num_v2,&h_g.num_v2,size_num_v2,cudaMemcpyHostToDevice);
 
     // int *h_c,*d_c;
     // h_c = (int*)malloc(size);
@@ -75,7 +75,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     // test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size);
 
 
-    vector<bool> left; vector<bool> right;
+    // vector<bool> left; vector<bool> right;
     // all the vertices in query result are set as true
     vector<vector<int>> queryStream;
     queryStream.resize(Q_MAX);
@@ -83,7 +83,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     loadQuery(dir, queryStream,n_query);
     queryStream.resize(n_query);
     cout<<n_query<<"\n";
-    exit(0);
+    
     int *h_queryStream,*d_queryStream;
     size_t size_h_query = sizeof(queryStream[0][0]) * n_query * 2;
     h_queryStream = (int*)malloc(size_h_query);
