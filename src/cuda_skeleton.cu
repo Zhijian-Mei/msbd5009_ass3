@@ -5,7 +5,7 @@ const int Q_MAX = 10000000;
 __global__ void test_Kernel(int* d_lrval_index_u_size,int* d_queryStream,int* d_queryAns)
 {
     int threadID = threadIdx.x;
-    d_queryStream[25] = 666;
+    d_queryAns[25] = 666;
     
 }
 
