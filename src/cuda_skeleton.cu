@@ -118,7 +118,9 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     queryStream.resize(n_query);
     cudaMalloc((void**)&d_n_query,sizeof(int));
     cudaMemcpy(&d_n_query,&n_query,sizeof(int),cudaMemcpyHostToDevice);
-
+    cudaMemcpy(&n_query,&d_n_query,sizeof(int),cudaMemcpyDeviceToHost);
+    cout<<n_query<<"\n";
+    exit(0);
     
     int *h_queryStream,*d_queryStream;
     size_t size_h_query = sizeof(queryStream[0][0]) * n_query * 2;
