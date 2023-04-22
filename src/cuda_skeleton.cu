@@ -41,7 +41,9 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     h_lrval_index_u_size = (int*)malloc(size_h_lrval_index_u_size);
     for (int i = 0;i<h_lrval_index_u.size();i++){
         h_lrval_index_u_size[i] = h_lrval_index_u[i].size();
+        cout<<h_lrval_index_u_size[i]<<"\n";
     }
+    exit(0);
     cudaMalloc((void**)&d_lrval_index_u_size,size_h_lrval_index_u_size);
     cudaMemcpy(d_lrval_index_u_size,h_lrval_index_u_size,size_h_lrval_index_u_size,cudaMemcpyHostToDevice);
     
