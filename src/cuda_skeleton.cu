@@ -1,12 +1,35 @@
 #include "decom.h"
 
 using namespace std;
-
+const int Q_MAX = 10000000;
 __global__ void test_Kernel(int* d_lrval_index_u_size,int* d_queryStream)
 {
     int threadID = threadIdx.x;
     d_queryStream[threadID] = 666;
     
+}
+
+void loadQuery(string dir, std::vector<std::vector<int>>& queryStream,int &line)
+{
+	int r, lval, rval;
+	string queryFile = dir + "querystream.txt";
+	FILE * queryVec = fopen(queryFile.c_str(), "r");
+	line = 0;
+	while ((r = fscanf(queryVec, "%d %d", &lval, &rval)) != EOF)
+	{
+		if (r != 2)
+		{
+			fprintf(stderr, "Bad file format: u v incorrect\n");
+			exit(1);
+		}
+		queryStream[line].resize(2);
+		queryStream[line][0] = lval;
+		queryStream[line][1] = rval;
+		line++;
+	}
+	// cout<<"line: " << line;
+
+	fclose(queryVec);
 }
 
 void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, int* queryAns) {
@@ -57,8 +80,10 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     vector<vector<int>> queryStream;
     queryStream.resize(Q_MAX);
     int n_query = 0;
-    loadQuery(argv[2], queryStream, n_query);
+    loadQuery(dir, queryStream,n_query);
     queryStream.resize(n_query);
+    cout<<n_query<<"\n";
+    exit(0);
     int *h_queryStream,*d_queryStream;
     size_t size_h_query = sizeof(queryStream[0][0]) * n_query * 2
     h_queryStream = (int*)malloc(size_h_query)
