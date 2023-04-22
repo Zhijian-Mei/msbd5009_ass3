@@ -11,7 +11,7 @@ __global__ void Kernel(int* d_lrval_index_u_size,int* d_queryStream,int* d_query
         int flag = 0;
         int lval = d_queryStream[i*2];
         int rval = d_queryStream[i*2+1];
-        if ((*d_lrval_index_u_length<= lval) || (d_lrval_index_u_size[i] <= rval)){
+        if ((*d_lrval_index_u_length<= lval) || (d_lrval_index_u_size[lval] <= rval)){
 		    flag = 0;
         } else {
             flag = 1;
@@ -32,7 +32,7 @@ __global__ void test(int* d_lrval_index_u_size,int* d_queryStream,int* d_queryAn
         int flag = 0;
         int lval = d_queryStream[i*2];
         int rval = d_queryStream[i*2+1];
-        if ((*d_lrval_index_u_length<= lval) || (d_lrval_index_u_size[i] <= rval)){
+        if ((*d_lrval_index_u_length<= lval) || (d_lrval_index_u_size[lval] <= rval)){
 		    flag = 0;
         } else {
             flag = 1;
@@ -94,11 +94,10 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     int h_lrval_index_u_length = (int)h_lrval_index_u.size();
     int *d_lrval_index_u_length;
     
-    cout<<h_lrval_index_u_length<<"\n";
+
     cudaMalloc((void**)&d_lrval_index_u_length,sizeof(int));
     cudaMemcpy(d_lrval_index_u_length,&h_lrval_index_u_length,sizeof(int),cudaMemcpyHostToDevice);
-    cudaMemcpy(&h_lrval_index_u_length,d_lrval_index_u_length,sizeof(int),cudaMemcpyDeviceToHost);
-    cout<<h_lrval_index_u_length<<"\n";
+
     
     
     size_t size_h_lrval_index_u_size = sizeof(h_lrval_index_u.size()) * h_lrval_index_u.size();
