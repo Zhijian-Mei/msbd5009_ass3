@@ -2,10 +2,10 @@
 
 using namespace std;
 const int Q_MAX = 10000000;
-__global__ void test_Kernel(int* d_lrval_index_u_size,int* d_queryStream)
+__global__ void test_Kernel(int* d_lrval_index_u_size,int* d_queryStream,int* d_queryAns)
 {
     int threadID = threadIdx.x;
-    d_queryStream[threadID] = 666;
+    d_queryStream[25] = 666;
     
 }
 
@@ -74,9 +74,6 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     
     // test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size);
 
-
-    // vector<bool> left; vector<bool> right;
-    // all the vertices in query result are set as true
     vector<vector<int>> queryStream;
     queryStream.resize(Q_MAX);
     int n_query = 0;
@@ -94,14 +91,19 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
 
     cudaMalloc((void**)&d_queryStream,size_h_query);
     cudaMemcpy(d_queryStream,h_queryStream,size_h_query,cudaMemcpyHostToDevice);
-    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size,d_queryStream);
-    cudaMemcpy(h_queryStream,d_queryStream,size_h_query,cudaMemcpyDeviceToHost);
-    cout<<h_queryStream[18]<<" "<<h_queryStream[19]<<"\n";
-    exit(0);
-
+    // test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size,d_queryStream);
 
     int h_queryAns[n_query*3];
     int *d_queryAns;
+    size_t size_h_queryAns = sizeof(int)*n_query*3;
+
+    cudaMalloc((void**)&d_queryAns,size_h_queryAns);
+    cudaMemcpy(d_queryAns,h_queryAns,size_h_queryAns,cudaMemcpyHostToDevice);
+    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size,d_queryStream,d_queryAns);
+    cudaMemcpy(h_queryAns,d_queryAns,size_h_queryAns,cudaMemcpyDeviceToHost);
+    cout<<h_queryAns[25]<<"\n";
+    exit(0);
+
 
 
 
