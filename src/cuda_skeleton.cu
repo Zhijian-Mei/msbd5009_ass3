@@ -2,15 +2,15 @@
 
 using namespace std;
 const int Q_MAX = 10000000;
-__global__ void test_Kernel(int* d_lrval_index_u_size,int* d_queryStream,int* d_queryAns,int d_n_query,int* d_lrval_index_u_length)
+__global__ void test_Kernel(int* d_lrval_index_u_size,int* d_queryStream,int* d_queryAns,int* d_n_query,int* d_lrval_index_u_length)
 {
     const int tid = blockDim.x*blockIdx.x + threadIdx.x;
     const int nthread = blockDim.x*gridDim.x; 
 
-    for(int i = tid;i<d_n_query; i+= nthread){
+    for(int i = tid;i<*d_n_query; i+= nthread){
         int flag = 0;
-        // int lval = d_queryStream[i*2];
-        // int rval = d_queryStream[i*2+1];
+        int lval = d_queryStream[i*2];
+        int rval = d_queryStream[i*2+1];
         // if ((*d_lrval_index_u_length<= lval) || (d_lrval_index_u_size[i] <= rval)){
 		//     flag = 0;
         // } else {
@@ -104,7 +104,8 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     queryStream.resize(n_query);
     cudaMalloc((void**)&d_n_query,sizeof(int));
     cudaMemcpy(d_n_query,&n_query,sizeof(int),cudaMemcpyHostToDevice);
-
+    cout<<n_query<<"\n";
+    exit(0);
     
     int *h_queryStream,*d_queryStream;
     size_t size_h_query = sizeof(queryStream[0][0]) * n_query * 2;
@@ -124,7 +125,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
 
     cudaMalloc((void**)&d_queryAns,size_h_queryAns);
     cudaMemcpy(d_queryAns,queryAns,size_h_queryAns,cudaMemcpyHostToDevice);
-    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size,d_queryStream,d_queryAns,*d_n_query,d_lrval_index_u_length);
+    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size,d_queryStream,d_queryAns,d_n_query,d_lrval_index_u_length);
 
     cudaMemcpy(queryAns,d_queryAns,size_h_queryAns,cudaMemcpyDeviceToHost);
 
