@@ -11,15 +11,15 @@ __global__ void test_Kernel(int* d_lrval_index_u_size,int* d_queryStream,int* d_
         int flag = 0;
         int lval = d_queryStream[i*2];
         int rval = d_queryStream[i*2+1];
-        if ((*d_lrval_index_u_length<= lval) || (d_lrval_index_u_size[i] <= rval)){
-		    flag = 0;
-        } else {
-            flag = 1;
-        }
+        // if ((*d_lrval_index_u_length<= lval) || (d_lrval_index_u_size[i] <= rval)){
+		//     flag = 0;
+        // } else {
+        //     flag = 1;
+        // }
 
-        d_queryAns[i*3] = lval;
-        d_queryAns[i*3+1] = rval;
-        d_queryAns[i*3+2] = flag;
+        // d_queryAns[i*3] = lval;
+        // d_queryAns[i*3+1] = rval;
+        // d_queryAns[i*3+2] = flag;
     }
     
 }
@@ -102,7 +102,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     cudaMemcpy(d_n_query,&n_query,sizeof(int),cudaMemcpyHostToDevice);
     loadQuery(dir, queryStream,n_query);
     queryStream.resize(n_query);
-    cout<<n_query<<"\n";
+
     
     int *h_queryStream,*d_queryStream;
     size_t size_h_query = sizeof(queryStream[0][0]) * n_query * 2;
