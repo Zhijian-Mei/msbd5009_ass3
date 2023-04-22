@@ -2,10 +2,10 @@
 
 using namespace std;
 
-__global__ void test_Kernel(int* d_lrval_index_u_size,int* d_c)
+__global__ void test_Kernel(int* d_c)
 {
     int threadID = threadIdx.x;
-    // d_c[threadID] = 1;
+    d_c[threadID] = threadID;
 }
 
 void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, int* queryAns) {
@@ -33,9 +33,10 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     h_c = (int*)malloc(size);
     cudaMalloc((void**)&d_c,size);
     cudaMemcpy(d_c,h_c,size,cudaMemcpyHostToDevice);
-    // test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_c,d_num_v1,d_num_v2);
-    // cudaMemcpy(h_c,d_c,size,cudaMemcpyDeviceToHost);
-    // exit(0);
+    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_c);
+    cudaMemcpy(h_c,d_c,size,cudaMemcpyDeviceToHost);
+    cout<<d_c[0]<<" "<<d_c[1]<<"\n";
+    exit(0);
     int *h_lrval_index_u_size,*d_lrval_index_u_size;
     size_t size_h_lrval_index_u_size = sizeof(h_lrval_index_u.size()) * h_lrval_index_u.size();
     h_lrval_index_u_size = (int*)malloc(size_h_lrval_index_u_size);
@@ -50,7 +51,7 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     
     test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size,d_c);
     cudaMemcpy(h_c,d_c,size,cudaMemcpyDeviceToHost);
-    cout<<d_c[0]<<" "<<d_c[1]<<"\n";
+    // cout<<d_c[0]<<" "<<d_c[1]<<"\n";
     exit(0);
     // vector<bool> left; vector<bool> right;
     // // all the vertices in query result are set as true
