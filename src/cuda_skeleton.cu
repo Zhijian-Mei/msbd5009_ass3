@@ -2,10 +2,10 @@
 
 using namespace std;
 
-__global__ void test_Kernel(int* d_c)
+__global__ void test_Kernel(int* d_lrval_index_u_size,int* d_c)
 {
     int threadID = threadIdx.x;
-    d_c[threadID] = threadID;
+    d_c[threadID] = d_lrval_index_u_size[threadID];
 }
 
 void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, int* queryAns) {
@@ -33,26 +33,26 @@ void cuda_query(string dir, int num_blocks_per_grid, int num_threads_per_block, 
     h_c = (int*)malloc(size);
     cudaMalloc((void**)&d_c,size);
     cudaMemcpy(d_c,h_c,size,cudaMemcpyHostToDevice);
-    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_c);
+    // test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_c);
+    // cudaMemcpy(h_c,d_c,size,cudaMemcpyDeviceToHost);
+    // cout<<h_c[0]<<" "<<h_c[1]<<"\n";
+    // exit(0);
+    int *h_lrval_index_u_size,*d_lrval_index_u_size;
+    size_t size_h_lrval_index_u_size = sizeof(h_lrval_index_u.size()) * h_lrval_index_u.size();
+    h_lrval_index_u_size = (int*)malloc(size_h_lrval_index_u_size);
+ 
+    for (int i = 0;i<h_lrval_index_u.size();i++){
+        h_lrval_index_u_size[i] = h_lrval_index_u[i].size();
+    }
+
+    
+    cudaMalloc((void**)&d_lrval_index_u_size,size_h_lrval_index_u_size);
+    cudaMemcpy(d_lrval_index_u_size,h_lrval_index_u_size,size_h_lrval_index_u_size,cudaMemcpyHostToDevice);
+    
+    test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size,d_c);
     cudaMemcpy(h_c,d_c,size,cudaMemcpyDeviceToHost);
     cout<<h_c[0]<<" "<<h_c[1]<<"\n";
     exit(0);
-    // int *h_lrval_index_u_size,*d_lrval_index_u_size;
-    // size_t size_h_lrval_index_u_size = sizeof(h_lrval_index_u.size()) * h_lrval_index_u.size();
-    // h_lrval_index_u_size = (int*)malloc(size_h_lrval_index_u_size);
- 
-    // for (int i = 0;i<h_lrval_index_u.size();i++){
-    //     h_lrval_index_u_size[i] = h_lrval_index_u[i].size();
-    // }
-
-    
-    // cudaMalloc((void**)&d_lrval_index_u_size,size_h_lrval_index_u_size);
-    // cudaMemcpy(d_lrval_index_u_size,h_lrval_index_u_size,size_h_lrval_index_u_size,cudaMemcpyHostToDevice);
-    
-    // test_Kernel<<<num_blocks_per_grid,num_threads_per_block>>>(d_lrval_index_u_size,d_c);
-    // cudaMemcpy(h_c,d_c,size,cudaMemcpyDeviceToHost);
-    // cout<<d_c[0]<<" "<<d_c[1]<<"\n";
-    // exit(0);
     // vector<bool> left; vector<bool> right;
     // // all the vertices in query result are set as true
     // vector<vector<int>> queryStream;
